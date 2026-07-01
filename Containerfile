@@ -1,3 +1,6 @@
+ARG PATTERNIZER_IMG=quay.io/validatedpatterns/patternizer:latest
+
+FROM ${PATTERNIZER_IMG} as patternizer
 FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 ARG TITLE="utility-container"
@@ -139,5 +142,6 @@ ADD https://raw.githubusercontent.com/validatedpatterns/utilities/main/aws-tools
 RUN chmod 755 /usr/local/bin/start-instances.py /usr/local/bin/stop-instances.py /usr/local/bin/status-instances.py
 
 COPY default-cmd.sh /usr/local/bin
+COPY --from=patternizer /usr/local/bin/patternizer /usr/local/bin/patternizer
 WORKDIR /pattern
 CMD ["/usr/local/bin/default-cmd.sh"]
